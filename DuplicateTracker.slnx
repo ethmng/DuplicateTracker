@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DuplicateTracker.csproj" />
+  <Project Path="tests/DuplicateTracker.Tests.csproj" />
+</Solution>
