@@ -376,3 +376,15 @@ public class ActionTests
         Assert.EndsWith("new.txt", keeper.GetProperty("path").GetString(), StringComparison.OrdinalIgnoreCase);
     }
 }
+
+public class ShellPickerTests
+{
+    [Fact]
+    public void Dialog_can_be_configured_without_opening()
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
+
+        ShellPicker.Probe();
+    }
+}

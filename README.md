@@ -8,16 +8,16 @@ The program is a console application. Start it with no arguments and it opens a 
 
 ## Download
 
-Version 1.0.0 is built as a single `.exe`. You do not need a separate .NET install.
+Version 1.1.0 is built as a single `.exe`. You do not need a separate .NET install.
 
 | File | Machine |
 | --- | --- |
-| `DuplicateTracker-1.0.0-win-x64.zip` | 64-bit Windows on Intel or AMD |
-| `DuplicateTracker-1.0.0-win-arm64.zip` | 64-bit Windows on ARM |
+| `DuplicateTracker-1.1.0-win-x64.zip` | 64-bit Windows on Intel or AMD |
+| `DuplicateTracker-1.1.0-win-arm64.zip` | 64-bit Windows on ARM |
 
 `SHA256SUMS.txt` sits next to the archives. Each line is the SHA-256 of one zip, then two spaces, then the file name.
 
-On GitHub, those files are attached when a tag such as `v1.0.0` is pushed. The workflow in `.github/workflows/release.yml` runs the tests, builds both archives, and publishes the release. If you have the source on this machine and no release yet, `build.ps1` writes the same archives into `dist\`.
+On GitHub, those files are attached when a tag such as `v1.1.0` is pushed. The workflow in `.github/workflows/release.yml` runs the tests, builds both archives, and publishes the release. If you have the source on this machine and no release yet, `build.ps1` writes the same archives into `dist\`.
 
 Unzip the archive. It contains:
 
@@ -60,7 +60,7 @@ The lines below show the shape of the output. The counts are an illustration, no
 |                                                                  |
 |   ######  ######   DuplicateTracker                              |
 |   ##  ##    ##     Identical files, matched by SHA-256           |
-|   ##  ##    ##     1.0.0                                         |
+|   ##  ##    ##     1.1.0                                         |
 |   ######    ##     Keep one copy.                                |
 |                                                                  |
 +------------------------------------------------------------------+
@@ -159,6 +159,8 @@ The menu you get with no arguments is:
 
 1. Scan a folder. You can add more folders before the scan starts.
 2. Print the SHA-256 of one file.
+
+When a folder or a file is asked, press Enter. Windows opens the usual dialog: a folder for the scan and for a move, a file for the signature, and a save dialog for the report. The chosen path is printed. Type a path instead if you already have one. Cancel the dialog to leave that step. A script that redirects input does not open a dialog; send the path as before.
 3. Settings: minimum size, extensions, folder names to skip, subfolders, empty files, cloud-only files, directory links, threads, cache files.
 4. The same help text as `--help`.
 5. Quit.

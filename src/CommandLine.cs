@@ -177,6 +177,10 @@ internal static class CommandLine
           DuplicateTracker --help
           DuplicateTracker --version
 
+        At the menu, press Enter when a folder or a file is asked. Windows opens
+        its dialog. Type a path if you already have one. A redirected script does
+        not open the dialog.
+
         Scan options
           --min-size <size>         Skip smaller files. Examples: 512, 10KB, 1MB, 1.5GB
           --include-empty           Treat empty files as one duplicate group

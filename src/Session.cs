@@ -110,7 +110,7 @@ internal static class Session
     {
         ConsoleUi.Line("");
         ConsoleUi.Line("  " + SettingsText.Brief(settings), Tone.Dim);
-        var first = ConsoleUi.ReadLine("Folder to scan: ", cancellationToken);
+        var first = ConsoleUi.ReadFolder("Folder to scan", cancellationToken);
         if (string.IsNullOrWhiteSpace(first))
             return;
 
@@ -123,7 +123,7 @@ internal static class Session
         var paths = new List<string> { first };
         while (ConsoleUi.AskYesNo("Add another folder?", false, cancellationToken))
         {
-            var next = ConsoleUi.ReadLine("Folder: ", cancellationToken);
+            var next = ConsoleUi.ReadFolder("Folder", cancellationToken);
             if (string.IsNullOrWhiteSpace(next))
                 break;
 
@@ -148,7 +148,7 @@ internal static class Session
 
     static void HashPrompt(CancellationToken cancellationToken)
     {
-        var path = ConsoleUi.ReadLine("File: ", cancellationToken);
+        var path = ConsoleUi.ReadFile("File", cancellationToken);
         if (string.IsNullOrWhiteSpace(path))
             return;
 
@@ -497,7 +497,7 @@ internal static class Review
         {
             var destination = arg;
             if (string.IsNullOrWhiteSpace(destination))
-                destination = ConsoleUi.ReadLine("Move extras to folder: ", cancellationToken);
+                destination = ConsoleUi.ReadFolder("Move extras to folder", cancellationToken);
 
             if (string.IsNullOrWhiteSpace(destination))
             {
@@ -565,10 +565,15 @@ internal static class Review
     {
         var path = arg;
         if (string.IsNullOrWhiteSpace(path))
-            path = ConsoleUi.ReadLine("Report path (.csv, .json, or .txt) [duplicates.csv]: ", cancellationToken);
+            path = ConsoleUi.ReadSaveFile("Report path (.csv, .json, or .txt)", "duplicates.csv", cancellationToken);
 
         if (string.IsNullOrWhiteSpace(path))
+        {
+            if (!Console.IsInputRedirected)
+                return;
+
             path = "duplicates.csv";
+        }
 
         try
         {

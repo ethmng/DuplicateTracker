@@ -150,6 +150,63 @@ internal static class ConsoleUi
         return CleanInput(line);
     }
 
+    public static string? ReadFolder(string label, CancellationToken cancellationToken) =>
+        ReadPath(label, PathKind.Folder, defaultName: null, cancellationToken);
+
+    public static string? ReadFile(string label, CancellationToken cancellationToken) =>
+        ReadPath(label, PathKind.File, defaultName: null, cancellationToken);
+
+    public static string? ReadSaveFile(string label, string defaultName, CancellationToken cancellationToken)
+    {
+        if (Console.IsInputRedirected)
+            return ReadLine($"{label} [{defaultName}]: ", cancellationToken);
+
+        return ReadPath(label, PathKind.Save, defaultName, cancellationToken);
+    }
+
+    static string? ReadPath(string label, PathKind kind, string? defaultName, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (Console.IsInputRedirected)
+            return ReadLine(label + ": ", cancellationToken);
+
+        Line(label + ". Press Enter to choose it, or type a path.");
+        var typed = ReadLine("> ", cancellationToken);
+        if (typed is null || typed.Length > 0)
+            return typed;
+
+        cancellationToken.ThrowIfCancellationRequested();
+        if (!OperatingSystem.IsWindows())
+            return ReadLine(label + ": ", cancellationToken);
+
+        try
+        {
+            string? picked;
+            if (kind == PathKind.File)
+                picked = ShellPicker.PickFile(label);
+            else if (kind == PathKind.Save)
+                picked = ShellPicker.PickSaveFile(label, defaultName ?? "duplicates.csv");
+            else
+                picked = ShellPicker.PickFolder(label);
+
+            if (!string.IsNullOrWhiteSpace(picked))
+                Line(picked);
+            return string.IsNullOrWhiteSpace(picked) ? null : picked;
+        }
+        catch (COMException)
+        {
+            Line("The dialog could not open. Type a path.", Tone.Warn);
+            return ReadLine(label + ": ", cancellationToken);
+        }
+    }
+
+    enum PathKind
+    {
+        Folder,
+        File,
+        Save
+    }
+
     public static string? ReadCommand(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
